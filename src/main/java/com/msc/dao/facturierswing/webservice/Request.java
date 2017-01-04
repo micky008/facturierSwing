@@ -154,7 +154,7 @@ public class Request {
             }
             StringBuilder sb = new StringBuilder();
             for (Object o : lo) {
-                sb.append(o.toString());
+                sb.append(convertFieldToString(o));
                 sb.append(";");
             }
             return URLEncoder.encode(sb.toString(), "UTF-8");
@@ -172,13 +172,20 @@ public class Request {
             if (o == null) {
                 return "";
             }
-            return URLEncoder.encode(o.toString(), "UTF-8");
+            return URLEncoder.encode(convertFieldToString(o), "UTF-8");
         } catch (IllegalAccessException ex) {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private String convertFieldToString(Object o) {
+        if (o.getClass() == Date.class) {
+            return formatDate((Date) o);
+        }
+        return o.toString();
     }
 
 }

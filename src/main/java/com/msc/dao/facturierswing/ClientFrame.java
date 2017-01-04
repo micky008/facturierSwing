@@ -21,6 +21,7 @@ public class ClientFrame extends javax.swing.JDialog {
 
     private boolean isUpdate = true;
     private Main main;
+
     /**
      * Creates new form MonEntrepriseFrame
      */
@@ -272,7 +273,7 @@ public class ClientFrame extends javax.swing.JDialog {
             jLabelResultat.setText("Soucis d'enregistremenmt");
         }
         main.clients.add(me);
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

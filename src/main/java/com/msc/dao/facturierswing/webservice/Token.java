@@ -10,13 +10,12 @@ public class Token {
 
     public static final String HEADER_AUTH = "AUTHORIZATION";
     public static final String HEADER_ALLOW = "ALLOW";
-     public static final String HEADER_ID_ALLOW = "1";
-    
-    
+    public static final String HEADER_ID_ALLOW = "1";
+
     public static String getHeaderBuild() {
-        return HEADER_AUTH+ ":" + getToken();
-    }    
-    
+        return HEADER_AUTH + ":" + getToken();
+    }
+
     public static void setToken(String tk) {
         token = tk;
     }
@@ -27,7 +26,5 @@ public class Token {
     public static String getToken() {
         return token;
     }
-
-
 
 }

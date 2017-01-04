@@ -17,7 +17,7 @@ public class Response {
     }
 
     private void replaceforHelper() {
-        
+
     }
 
     public Object getObject(Class c, Type type) {

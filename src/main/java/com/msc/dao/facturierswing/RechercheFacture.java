@@ -39,8 +39,9 @@ public class RechercheFacture extends javax.swing.JDialog {
     private void remplirClient() throws IOException {
         Request req = new Request("client", "all");
         Response res = req.sendRequest();
-        java.lang.reflect.Type fooType = new TypeToken<List<Client>>() {}.getType();
-        clients = (List<Client>) res.getObject(null,fooType);
+        java.lang.reflect.Type fooType = new TypeToken<List<Client>>() {
+        }.getType();
+        clients = (List<Client>) res.getObject(null, fooType);
         for (Object o : clients) {
             Client c = (Client) o;
             jComboBoxClient.addItem(c);
@@ -154,11 +155,11 @@ public class RechercheFacture extends javax.swing.JDialog {
             res = request.sendRequest();
             ListHelper lh = (ListHelper) res.getObject(ListHelper.class);
             res.setToken(lh.getToken());
-            if (lh.getList() != null && lh.getList().size() > 1 ){
-            
-            }else if (lh.getList() != null && lh.getList().size() == 1){
-                main.setFacture((Facture)lh.getList().get(0));
-            
+            if (lh.getList() != null && lh.getList().size() > 1) {
+
+            } else if (lh.getList() != null && lh.getList().size() == 1) {
+                main.setFacture((Facture) lh.getList().get(0));
+
             }
         } catch (IOException ex) {
             Logger.getLogger(RechercheFacture.class.getName()).log(Level.SEVERE, null, ex);

@@ -58,7 +58,7 @@ public class MonEntrepriseFrame extends javax.swing.JDialog {
             jTextFieldVille.setText(mo.getVille());
 
             res.setToken(mo.getToken());
-            
+
             String ms[] = mo.getMentionLegales().split(MonEntreprise.SEPARATOR_MENTION_LEGAL);
             String row[];
             for (String ml : ms) {

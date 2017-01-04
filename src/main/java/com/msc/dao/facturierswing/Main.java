@@ -15,7 +15,6 @@ import com.msc.facturierws.entity.LigneFacture;
 import com.msc.facturierws.entity.MoyenDePaiement;
 import com.msc.rest.tokenrestjersey.helper.Helper;
 import com.msc.rest.tokenrestjersey.helper.ListHelper;
-import com.sun.webkit.event.WCKeyEvent;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -92,6 +91,7 @@ public class Main extends javax.swing.JFrame {
         JTextFieldDateReglement = new javax.swing.JFormattedTextField();
         jTextFieldMoyenPaiementAutre = new javax.swing.JTextField();
         jComboBoxMoyenPaiement = new javax.swing.JComboBox<>();
+        jButtonRemoveLine = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFichier = new javax.swing.JMenu();
         FileSave = new javax.swing.JMenuItem();
@@ -223,6 +223,13 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButtonRemoveLine.setText("Remove Line");
+        jButtonRemoveLine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveLineActionPerformed(evt);
+            }
+        });
+
         jMenuFichier.setText("Fichier");
 
         FileSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
@@ -325,10 +332,8 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jCheckBoxRegler)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel3)
-                        .addGap(84, 84, 84)
-                        .addComponent(jLabelTotaux)
-                        .addGap(10, 10, 10)
-                        .addComponent(jButtonCalculeTotaux))
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabelTotaux, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jComboBoxClient, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -345,42 +350,49 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(jTextFieldDateFacture, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonRemoveLine)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAddLine))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanelReglement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSave)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonCalculeTotaux, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonSave, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButtonSave)
+                .addComponent(idClient)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldDateFacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabelNoFacture))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAddLine)
+                    .addComponent(jButtonRemoveLine))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelTotaux)
+                    .addComponent(jLabel3)
+                    .addComponent(jCheckBoxRegler))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelReglement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(idClient)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBoxClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextFieldDateFacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabelNoFacture))
-                        .addGap(22, 22, 22)
-                        .addComponent(jButtonAddLine)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelTotaux)
-                            .addComponent(jButtonCalculeTotaux)
-                            .addComponent(jLabel3)
-                            .addComponent(jCheckBoxRegler))
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanelReglement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonCalculeTotaux)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSave)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -507,25 +519,20 @@ public class Main extends javax.swing.JFrame {
         jLabelTotaux.setText("" + total);
     }//GEN-LAST:event_jButtonCalculeTotauxActionPerformed
 
+    private void jButtonRemoveLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveLineActionPerformed
+        ((DefaultTableModel) (jTable1.getModel())).removeRow(jTable1.getRowCount() - 1);
+    }//GEN-LAST:event_jButtonRemoveLineActionPerformed
+
     private Facture createFacture() {
 
         try {
             Facture facture = new Facture();
             Client c = (Client) jComboBoxClient.getSelectedItem();
             facture.setIdClient(c.getId());
+            facture.setIdModele(1);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             facture.setDate(sdf.parse(jTextFieldDateFacture.getText()));
             jLabelNoFacture.setText(facture.getNoFacture());
-            LigneFacture lf;
-            List<LigneFacture> lfs = new ArrayList<>(jTable1.getModel().getRowCount());
-            for (int i = 0; i < jTable1.getModel().getRowCount(); i++) {
-                lf = new LigneFacture();
-                lf.setDesignation(jTable1.getValueAt(i, 0).toString());
-                lf.setQuantite(Double.parseDouble(jTable1.getValueAt(i, 1).toString()));
-                lf.setPuHT(Double.parseDouble(jTable1.getValueAt(i, 2).toString()));
-                lfs.add(lf);
-            }
-            facture.setLignes(lfs);
             facture.setIsRegle(jCheckBoxRegler.isSelected());
             if (jCheckBoxRegler.isSelected()) {
                 facture.setAutreMoyenDePaiment(jTextFieldMoyenPaiementAutre.getText());
@@ -537,8 +544,20 @@ public class Main extends javax.swing.JFrame {
             java.lang.reflect.Type fooType = new TypeToken<Helper<Integer>>() {
             }.getType();
             Helper<Integer> hi = (Helper<Integer>) res.getObject(null, fooType);
-            facture.setId(hi.getMyObject());
+            facture.setNumber(hi.getMyObject());
             facture.genereNoFacture();
+            LigneFacture lf;
+            List<LigneFacture> lfs = new ArrayList<>(jTable1.getModel().getRowCount());
+            for (int i = 0; i < jTable1.getModel().getRowCount(); i++) {
+                lf = new LigneFacture();
+                lf.setIdFacture(facture.getNoFacture());
+                lf.setDesignation(jTable1.getValueAt(i, 0).toString());
+                lf.setQuantite(Double.parseDouble(jTable1.getValueAt(i, 1).toString()));
+                lf.setPuHT(Double.parseDouble(jTable1.getValueAt(i, 2).toString()));
+                lfs.add(lf);
+            }
+            facture.setLignes(lfs);
+            facture.generateLinesStr();
             return facture;
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -617,6 +636,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddLine;
     private javax.swing.JButton jButtonCalculeTotaux;
+    private javax.swing.JButton jButtonRemoveLine;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JCheckBox jCheckBoxRegler;
     private javax.swing.JComboBox<Client> jComboBoxClient;

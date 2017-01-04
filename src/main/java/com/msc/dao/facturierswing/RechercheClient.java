@@ -5,12 +5,7 @@
  */
 package com.msc.dao.facturierswing;
 
-import com.google.gson.reflect.TypeToken;
-import com.msc.dao.facturierswing.webservice.Request;
-import com.msc.dao.facturierswing.webservice.Response;
 import com.msc.facturierws.entity.Client;
-import com.msc.rest.tokenrestjersey.helper.ListHelper;
-import java.awt.Frame;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,6 +16,7 @@ import java.util.List;
 public class RechercheClient extends javax.swing.JDialog {
 
     Main main;
+
     /**
      * Creates new form RechercheClient
      */
@@ -31,7 +27,7 @@ public class RechercheClient extends javax.swing.JDialog {
         remplirClient(main.clients);
     }
 
-    private void remplirClient(List<Client> clients) throws IOException {        
+    private void remplirClient(List<Client> clients) throws IOException {
         for (Client c : clients) {
             jComboBox1.addItem(c);
         }
