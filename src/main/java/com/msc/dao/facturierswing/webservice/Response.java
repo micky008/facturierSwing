@@ -10,14 +10,16 @@ import java.lang.reflect.Type;
  */
 public class Response {
 
-    private String reponse;
+    
+    public static boolean DEBUG_MODE = false;
+    
+    private final String reponse;
 
     public Response(String reponse) {
         this.reponse = reponse;
-    }
-
-    private void replaceforHelper() {
-
+        if (DEBUG_MODE){
+            System.out.println(reponse);
+        }
     }
 
     public Object getObject(Class c, Type type) {
@@ -28,7 +30,7 @@ public class Response {
         }
         return gson.fromJson(reponse, c);
     }
-
+   
     public Object getObject(Class c) {
         return getObject(c, null);
     }

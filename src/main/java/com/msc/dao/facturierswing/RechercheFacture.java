@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -24,7 +25,6 @@ public class RechercheFacture extends javax.swing.JDialog {
 
     private final Main main;
     private List clients;
-    private int choose;
 
     /**
      * Creates new form RechercheClient
@@ -32,16 +32,12 @@ public class RechercheFacture extends javax.swing.JDialog {
     public RechercheFacture(Main parent, boolean modal) throws IOException {
         super(parent, modal);
         this.main = parent;
+        clients = parent.clients;
         initComponents();
         remplirClient();
     }
 
     private void remplirClient() throws IOException {
-        Request req = new Request("client", "all");
-        Response res = req.sendRequest();
-        java.lang.reflect.Type fooType = new TypeToken<List<Client>>() {
-        }.getType();
-        clients = (List<Client>) res.getObject(null, fooType);
         for (Object o : clients) {
             Client c = (Client) o;
             jComboBoxClient.addItem(c);
@@ -57,7 +53,7 @@ public class RechercheFacture extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        jButtonChercher = new javax.swing.JButton();
         jTextFieldNoFacture = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -65,13 +61,16 @@ public class RechercheFacture extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jTextFieldDate = new javax.swing.JFormattedTextField();
         jLabelResultat = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListFacture = new javax.swing.JList<>();
+        Visualisation = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jButton1.setText("Chercher");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonChercher.setText("Chercher");
+        jButtonChercher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonChercherActionPerformed(evt);
             }
         });
 
@@ -85,6 +84,15 @@ public class RechercheFacture extends javax.swing.JDialog {
 
         jLabelResultat.setText(". . .");
 
+        jScrollPane1.setViewportView(jListFacture);
+
+        Visualisation.setText("Visualisation");
+        Visualisation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VisualisationActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,7 +103,10 @@ public class RechercheFacture extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(151, 151, 151)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -105,10 +116,15 @@ public class RechercheFacture extends javax.swing.JDialog {
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelResultat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 64, Short.MAX_VALUE)
-                                .addComponent(jButton1))
-                            .addComponent(jLabelResultat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGap(60, 60, 60)
+                                .addComponent(jButtonChercher)
+                                .addContainerGap())))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Visualisation)
+                .addGap(76, 76, 76))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,7 +134,7 @@ public class RechercheFacture extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldNoFacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonChercher))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -126,55 +142,78 @@ public class RechercheFacture extends javax.swing.JDialog {
                     .addComponent(jTextFieldDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelResultat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(Visualisation)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonChercherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChercherActionPerformed
 
-        String suiteUrl = null;
+        String suiteUrl = "search/";
         if (jTextFieldNoFacture.getText() != null && !jTextFieldNoFacture.getText().isEmpty()) {
-            suiteUrl = jTextFieldNoFacture.getText() + "/19700101/0";
+            suiteUrl += jTextFieldNoFacture.getText() + "/19700101/0";
         } else if (jTextFieldDate.getText() != null && !jTextFieldDate.getText().isEmpty()) {
-            suiteUrl = "null/" + jTextFieldDate.getText() + "/0";
+            suiteUrl += "null/" + jTextFieldDate.getText() + "/0";
         } else {
-
-        }
-        if (suiteUrl == null) {
-            jLabelResultat.setText("Il faut remplir 1 des 3 champs");
-            return;
+            suiteUrl += "null/19700101/"+((Client)jComboBoxClient.getSelectedItem()).getId();
         }
         Request request = new Request("facture", suiteUrl);
         Response res = null;
         try {
             res = request.sendRequest();
-            ListHelper lh = (ListHelper) res.getObject(ListHelper.class);
-            res.setToken(lh.getToken());
-            if (lh.getList() != null && lh.getList().size() > 1) {
-
-            } else if (lh.getList() != null && lh.getList().size() == 1) {
-                main.setFacture((Facture) lh.getList().get(0));
-
+            java.lang.reflect.Type fooType = new TypeToken<ListHelper<Facture>>() {
+            }.getType();
+            ListHelper<Facture> lf = (ListHelper<Facture>) res.getObject(null, fooType);           
+            res.setToken(lf.getToken());
+            if (lf.getList() != null && lf.getList().size() > 1) {
+                for (Facture facture : lf.getList()) {
+                    facture.setClient(getClientById(facture.getIdClient()));
+                    ((DefaultListModel)jListFacture.getModel()).addElement(facture);
+                }
+            } else if (lf.getList() != null && lf.getList().size() == 1) {
+                main.setFacture((Facture) lf.getList().get(0));
             }
         } catch (IOException ex) {
             Logger.getLogger(RechercheFacture.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonChercherActionPerformed
+
+    private Client getClientById(int idClient){
+        for (Client c : main.clients){
+            if (c.getId() == idClient){
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    
+    private void VisualisationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualisationActionPerformed
+        Facture f = jListFacture.getSelectedValue();
+        main.setFacture(f);
+    }//GEN-LAST:event_VisualisationActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton Visualisation;
+    private javax.swing.JButton jButtonChercher;
     private javax.swing.JComboBox<Client> jComboBoxClient;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelResultat;
+    private javax.swing.JList<Facture> jListFacture;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JFormattedTextField jTextFieldDate;
     private javax.swing.JTextField jTextFieldNoFacture;
     // End of variables declaration//GEN-END:variables

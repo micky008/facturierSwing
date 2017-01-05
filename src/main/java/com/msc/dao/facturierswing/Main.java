@@ -484,6 +484,7 @@ public class Main extends javax.swing.JFrame {
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         try {
             Facture f = createFacture();
+            jLabelNoFacture.setText(f.getNoFacture());
             Request r = new Request("facture", "insert");
             Response res = r.sendRequest(f, WebService.METHOD.POST);
             res.consumeToken();
@@ -550,10 +551,10 @@ public class Main extends javax.swing.JFrame {
             List<LigneFacture> lfs = new ArrayList<>(jTable1.getModel().getRowCount());
             for (int i = 0; i < jTable1.getModel().getRowCount(); i++) {
                 lf = new LigneFacture();
-                lf.setIdFacture(facture.getNoFacture());
+                lf.setNoFacture(facture.getNoFacture());
                 lf.setDesignation(jTable1.getValueAt(i, 0).toString());
                 lf.setQuantite(Double.parseDouble(jTable1.getValueAt(i, 1).toString()));
-                lf.setPuHT(Double.parseDouble(jTable1.getValueAt(i, 2).toString()));
+                lf.setPuHt(Double.parseDouble(jTable1.getValueAt(i, 2).toString()));
                 lfs.add(lf);
             }
             facture.setLignes(lfs);
@@ -574,6 +575,7 @@ public class Main extends javax.swing.JFrame {
         prop.load(r);
         r.close();
         WebService.prop = prop;
+        WebService.setDebugMode(Boolean.parseBoolean(prop.getProperty("debugMode")));
         Request request = new Request("login", "login");
         try {
             Response s = request.sendRequest();
@@ -695,8 +697,8 @@ public class Main extends javax.swing.JFrame {
 
             obj[0] = line.getDesignation();
             obj[1] = line.getQuantite();
-            obj[2] = line.getPuHT();
-            obj[3] = line.getQuantite() * line.getPuHT();
+            obj[2] = line.getPuHt();
+            obj[3] = line.getQuantite() * line.getPuHt();
 
             ((DefaultTableModel) (jTable1.getModel())).addRow(obj);
         }
