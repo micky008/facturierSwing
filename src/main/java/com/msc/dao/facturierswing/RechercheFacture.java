@@ -173,15 +173,11 @@ public class RechercheFacture extends javax.swing.JDialog {
             java.lang.reflect.Type fooType = new TypeToken<ListHelper<Facture>>() {
             }.getType();
             ListHelper<Facture> lf = (ListHelper<Facture>) res.getObject(null, fooType);           
-            res.setToken(lf.getToken());
-            if (lf.getList() != null && lf.getList().size() > 1) {
-                for (Facture facture : lf.getList()) {
-                    facture.setClient(getClientById(facture.getIdClient()));
-                    ((DefaultListModel)jListFacture.getModel()).addElement(facture);
-                }
-            } else if (lf.getList() != null && lf.getList().size() == 1) {
-                main.setFacture((Facture) lf.getList().get(0));
-            }
+            res.setToken(lf.getToken());            
+            for (Facture facture : lf.getList()) {
+                facture.setClient(getClientById(facture.getIdClient()));
+                ((DefaultListModel) jListFacture.getModel()).addElement(facture);
+            }            
         } catch (IOException ex) {
             Logger.getLogger(RechercheFacture.class.getName()).log(Level.SEVERE, null, ex);
         }

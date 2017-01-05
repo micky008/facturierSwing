@@ -532,7 +532,7 @@ public class Main extends javax.swing.JFrame {
             facture.setIdClient(c.getId());
             facture.setIdModele(1);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            facture.setDate(sdf.parse(jTextFieldDateFacture.getText()));
+            facture.setDateDuJour(sdf.parse(jTextFieldDateFacture.getText()));
             jLabelNoFacture.setText(facture.getNoFacture());
             facture.setIsRegle(jCheckBoxRegler.isSelected());
             if (jCheckBoxRegler.isSelected()) {
@@ -685,7 +685,7 @@ public class Main extends javax.swing.JFrame {
             }
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        jTextFieldDateFacture.setText(sdf.format(facture.getDate()));
+        jTextFieldDateFacture.setText(sdf.format(facture.getDateDuJour()));
         jLabelNoFacture.setText(facture.getNoFacture());
 
         Object obj[] = null;
@@ -717,6 +717,8 @@ public class Main extends javax.swing.JFrame {
             pos++;
         }
         jComboBoxMoyenPaiement.setSelectedIndex(tmp);
-        JTextFieldDateReglement.setText(sdf.format(facture.getDateRegle()));
+        if (facture.getDateRegle() != null){
+            JTextFieldDateReglement.setText(sdf.format(facture.getDateRegle()));
+        }
     }
 }
