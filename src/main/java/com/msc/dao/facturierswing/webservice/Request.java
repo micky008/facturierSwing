@@ -125,7 +125,10 @@ public class Request {
                 if (field.getType() == List.class) {
                     sb.append(convertList(tosend, field));
                 } else {
-                    sb.append(convertField(tosend, field));
+                    String resd = convertField(tosend, field);
+                    if (resd != null) {
+                        sb.append(resd);
+                    }
                 }
                 sb.append("&");
             }// Send post request
@@ -170,7 +173,7 @@ public class Request {
         try {
             Object o = f.get(ob);
             if (o == null) {
-                return "";
+                return null;
             }
             return URLEncoder.encode(convertFieldToString(o), "UTF-8");
         } catch (IllegalAccessException ex) {

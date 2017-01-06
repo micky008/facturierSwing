@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.msc.dao.facturierswing.webservice.Request;
 import com.msc.dao.facturierswing.webservice.Response;
 import com.msc.dao.facturierswing.webservice.WebService;
+import static com.msc.dao.facturierswing.webservice.WebService.METHOD.GET;
 import com.msc.facturierws.entity.Client;
 import com.msc.facturierws.entity.Facture;
 import com.msc.facturierws.entity.LigneFacture;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -57,7 +59,9 @@ public class Main extends javax.swing.JFrame {
             EditMoi.doClick();
         }
         clients = getAllClient();
+        addMoyenDePaiement();
         jPanelReglement.setVisible(false);
+        jLabelNoFacture.setText("");
     }
 
     /**
@@ -71,7 +75,6 @@ public class Main extends javax.swing.JFrame {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
         DateDuJour = new javax.swing.JMenuItem();
-        jButton1 = new javax.swing.JButton();
         jComboBoxClient = new javax.swing.JComboBox<>();
         idClient = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -91,6 +94,7 @@ public class Main extends javax.swing.JFrame {
         JTextFieldDateReglement = new javax.swing.JFormattedTextField();
         jTextFieldMoyenPaiementAutre = new javax.swing.JTextField();
         jComboBoxMoyenPaiement = new javax.swing.JComboBox<>();
+        jButtonClore = new javax.swing.JButton();
         jButtonRemoveLine = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFichier = new javax.swing.JMenu();
@@ -109,8 +113,6 @@ public class Main extends javax.swing.JFrame {
         DateDuJour.setText("jMenuItem1");
         jPopupMenu1.add(DateDuJour);
 
-        jButton1.setText("jButton1");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Facturier");
 
@@ -125,7 +127,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabel2.setText("No de la Facture");
 
-        jLabelNoFacture.setText("0");
+        jLabelNoFacture.setText(" ");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -186,11 +188,17 @@ public class Main extends javax.swing.JFrame {
 
         jLabel4.setText("Réglé quand ?");
 
-        JTextFieldDateReglement.setEditable(false);
         JTextFieldDateReglement.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
 
         jTextFieldMoyenPaiementAutre.setEditable(false);
         jTextFieldMoyenPaiementAutre.setText("Autre moyen de paiment");
+
+        jButtonClore.setText("Clore");
+        jButtonClore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCloreActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelReglementLayout = new javax.swing.GroupLayout(jPanelReglement);
         jPanelReglement.setLayout(jPanelReglementLayout);
@@ -200,23 +208,31 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanelReglementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelReglementLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(JTextFieldDateReglement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelReglementLayout.createSequentialGroup()
                         .addComponent(jComboBoxMoyenPaiement, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextFieldMoyenPaiementAutre, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(jTextFieldMoyenPaiementAutre, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanelReglementLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(JTextFieldDateReglement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonClore)
+                        .addGap(45, 45, 45))))
         );
         jPanelReglementLayout.setVerticalGroup(
             jPanelReglementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelReglementLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanelReglementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(JTextFieldDateReglement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanelReglementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelReglementLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanelReglementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(JTextFieldDateReglement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanelReglementLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jButtonClore)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelReglementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxMoyenPaiement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldMoyenPaiementAutre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -328,12 +344,6 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jCheckBoxRegler)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3)
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabelTotaux, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jComboBoxClient, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -354,9 +364,15 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAddLine))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelReglement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanelReglement, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jCheckBoxRegler)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3)))
+                        .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelTotaux, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonCalculeTotaux, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButtonSave, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(36, 36, 36))
@@ -372,10 +388,10 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldDateFacture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jLabelNoFacture))
-                .addGap(22, 22, 22)
+                    .addComponent(jLabelNoFacture, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAddLine)
                     .addComponent(jButtonRemoveLine))
@@ -432,15 +448,27 @@ public class Main extends javax.swing.JFrame {
         ((DefaultTableModel) (jTable1.getModel())).addRow(new Object[4]);
     }//GEN-LAST:event_jButtonAddLineActionPerformed
 
-    private void NewFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFactureActionPerformed
+    private Client getClientById(int idClient) {
         for (Client c : clients) {
-            jComboBoxClient.addItem(c);
+            if (c.getId() == idClient) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+
+    private void NewFactureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFactureActionPerformed
+        if (jComboBoxClient.getModel().getSize() == 0) {
+            for (Client c : clients) {
+                jComboBoxClient.addItem(c);
+            }
         }
 
         jTextFieldDateFacture.setText("");
         jLabelNoFacture.setText("");
 
-        for (int i = 0; i < jTable1.getModel().getRowCount(); i++) {
+        for (int i = jTable1.getModel().getRowCount() - 1; i >= 0; i--) {
             ((DefaultTableModel) (jTable1.getModel())).removeRow(i);
         }
 
@@ -448,13 +476,10 @@ public class Main extends javax.swing.JFrame {
 
         jTextFieldMoyenPaiementAutre.setText("");
 
-        MoyenDePaiement mps[] = MoyenDePaiement.values();
-        for (MoyenDePaiement mdp : mps) {
-            jComboBoxMoyenPaiement.addItem(mdp.toString());
+        addMoyenDePaiement();
 
-        }
         JTextFieldDateReglement.setText("");
-
+        cloreFactureOrNot(false);
     }//GEN-LAST:event_NewFactureActionPerformed
 
     private void FileSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileSaveActionPerformed
@@ -463,7 +488,8 @@ public class Main extends javax.swing.JFrame {
 
     private void FilePrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FilePrintActionPerformed
         try {
-            Facture f = createFacture();
+            Facture f = createFacture(jLabelNoFacture.getText().isEmpty());
+            f.setClient(getClientById(f.getIdClient()));
             Request r = new Request("facture", "print");
             Response res = r.sendRequest(f, WebService.METHOD.POST);
             java.lang.reflect.Type fooType = new TypeToken<Helper<String>>() {
@@ -471,10 +497,11 @@ public class Main extends javax.swing.JFrame {
             Helper<String> h = (Helper<String>) res.getObject(null, fooType);
             res.setToken(h.getToken());
             byte[] pdf = Base64.decodeBase64(h.getMyObject());
-            File file = new File(".", f.getClient().toString() + "-" + f.getNoFacture());
+            File file = new File(".", f.getClient().toString() + "-" + f.getNoFacture() + ".pdf");
             FileOutputStream fos = new FileOutputStream(file);
             IOUtils.write(pdf, fos);
-            Desktop.getDesktop().edit(file);
+            IOUtils.closeQuietly(fos);
+            Desktop.getDesktop().open(file.getAbsoluteFile());
 
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -483,9 +510,10 @@ public class Main extends javax.swing.JFrame {
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         try {
-            Facture f = createFacture();
+            boolean creaton = jLabelNoFacture.getText().isEmpty();
+            Facture f = createFacture(creaton);
             jLabelNoFacture.setText(f.getNoFacture());
-            Request r = new Request("facture", "insert");
+            Request r = new Request("facture", creaton ? "insert" : "update");
             Response res = r.sendRequest(f, WebService.METHOD.POST);
             res.consumeToken();
         } catch (IOException ex) {
@@ -506,6 +534,10 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jCheckBoxReglerActionPerformed
 
+    public void simuleCalculeClick() {
+        jButtonCalculeTotaux.doClick();
+    }
+
     private void jButtonCalculeTotauxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculeTotauxActionPerformed
         Double total = 0d;
         for (int i = 0; i < jTable1.getRowCount(); i++) {
@@ -524,7 +556,32 @@ public class Main extends javax.swing.JFrame {
         ((DefaultTableModel) (jTable1.getModel())).removeRow(jTable1.getRowCount() - 1);
     }//GEN-LAST:event_jButtonRemoveLineActionPerformed
 
-    private Facture createFacture() {
+    private void jButtonCloreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloreActionPerformed
+        String resI = JOptionPane.showInputDialog(this, "Clore la facture (n'est plus editable) tappez OUI", "ATTENTION", JOptionPane.INFORMATION_MESSAGE);
+        if (resI.equals("OUI")) {
+            try {
+                Request r = new Request("facture", "ferme/" + jLabelNoFacture.getText());
+                Response res = r.sendRequest(null, GET);
+                res.consumeToken();
+                cloreFactureOrNot(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButtonCloreActionPerformed
+
+    private void cloreFactureOrNot(boolean cloreFacture) {
+        jButtonClore.setEnabled(!cloreFacture);
+        jButtonSave.setEnabled(!cloreFacture);
+        jButtonAddLine.setEnabled(!cloreFacture);
+        jButtonRemoveLine.setEnabled(!cloreFacture);
+        jTable1.setEnabled(!cloreFacture);
+        jTextFieldDateFacture.setEnabled(!cloreFacture);
+        JTextFieldDateReglement.setEnabled(!cloreFacture);
+        jTextFieldMoyenPaiementAutre.setEnabled(!cloreFacture);
+    }
+
+    private Facture createFacture(boolean isCreate) {
 
         try {
             Facture facture = new Facture();
@@ -533,20 +590,25 @@ public class Main extends javax.swing.JFrame {
             facture.setIdModele(1);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             facture.setDateDuJour(sdf.parse(jTextFieldDateFacture.getText()));
-            jLabelNoFacture.setText(facture.getNoFacture());
             facture.setIsRegle(jCheckBoxRegler.isSelected());
             if (jCheckBoxRegler.isSelected()) {
                 facture.setAutreMoyenDePaiment(jTextFieldMoyenPaiementAutre.getText());
                 facture.setCommentRegle(MoyenDePaiement.valueOf(jComboBoxMoyenPaiement.getSelectedItem().toString()));
                 facture.setDateRegle(sdf.parse(JTextFieldDateReglement.getText()));
             }
-            Request r = new Request("facture", "number/" + Request.formatDate(jTextFieldDateFacture.getText(), "dd/MM/yyyy"));
-            Response res = r.sendRequest();
-            java.lang.reflect.Type fooType = new TypeToken<Helper<Integer>>() {
-            }.getType();
-            Helper<Integer> hi = (Helper<Integer>) res.getObject(null, fooType);
-            facture.setNumber(hi.getMyObject());
-            facture.genereNoFacture();
+            if (isCreate) {
+                Request r = new Request("facture", "number/" + Request.formatDate(jTextFieldDateFacture.getText(), "dd/MM/yyyy"));
+                Response res = r.sendRequest();
+                java.lang.reflect.Type fooType = new TypeToken<Helper<Integer>>() {
+                }.getType();
+                Helper<Integer> hi = (Helper<Integer>) res.getObject(null, fooType);
+                facture.setNumber(hi.getMyObject());
+                facture.genereNoFacture();
+                jLabelNoFacture.setText(facture.getNoFacture());
+            } else {
+                String tst = jLabelNoFacture.getText();
+                facture.setNoFacture(tst);
+            }
             LigneFacture lf;
             List<LigneFacture> lfs = new ArrayList<>(jTable1.getModel().getRowCount());
             for (int i = 0; i < jTable1.getModel().getRowCount(); i++) {
@@ -635,9 +697,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem NewFacture;
     private javax.swing.JMenuItem SearchFacture;
     private javax.swing.JLabel idClient;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddLine;
     private javax.swing.JButton jButtonCalculeTotaux;
+    private javax.swing.JButton jButtonClore;
     private javax.swing.JButton jButtonRemoveLine;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JCheckBox jCheckBoxRegler;
@@ -677,6 +739,17 @@ public class Main extends javax.swing.JFrame {
         return null;
     }
 
+    private void addMoyenDePaiement() {
+        if (jComboBoxMoyenPaiement.getItemCount() > 0) {
+            return;
+        }
+        MoyenDePaiement mps[] = MoyenDePaiement.values();
+        for (MoyenDePaiement mdp : mps) {
+            jComboBoxMoyenPaiement.addItem(mdp.toString());
+        }
+
+    }
+
     void setFacture(Facture facture) {
         for (Client c : clients) {
             jComboBoxClient.addItem(c);
@@ -689,7 +762,7 @@ public class Main extends javax.swing.JFrame {
         jLabelNoFacture.setText(facture.getNoFacture());
 
         Object obj[] = null;
-        for (int i = 0; i < jTable1.getModel().getRowCount(); i++) {
+        for (int i = jTable1.getModel().getRowCount() - 1; i >= 0; i--) {
             ((DefaultTableModel) (jTable1.getModel())).removeRow(i);
         }
         for (LigneFacture line : facture.getLignes()) {
@@ -710,15 +783,22 @@ public class Main extends javax.swing.JFrame {
         int pos = 0;
         int tmp = 0;
         for (MoyenDePaiement mdp : mps) {
-            jComboBoxMoyenPaiement.addItem(mdp.toString());
             if (mdp == facture.getCommentRegle()) {
                 tmp = pos;
+                break;
             }
             pos++;
         }
+
         jComboBoxMoyenPaiement.setSelectedIndex(tmp);
-        if (facture.getDateRegle() != null){
+        if (facture.getDateRegle() != null) {
             JTextFieldDateReglement.setText(sdf.format(facture.getDateRegle()));
         }
+        if (facture.getIsFinish()) {
+            cloreFactureOrNot(true);
+        } else {
+            cloreFactureOrNot(false);
+        }
     }
+
 }

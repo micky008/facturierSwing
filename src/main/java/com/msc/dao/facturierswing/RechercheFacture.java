@@ -84,6 +84,7 @@ public class RechercheFacture extends javax.swing.JDialog {
 
         jLabelResultat.setText(". . .");
 
+        jListFacture.setModel(new DefaultListModel());
         jScrollPane1.setViewportView(jListFacture);
 
         Visualisation.setText("Visualisation");
@@ -164,7 +165,7 @@ public class RechercheFacture extends javax.swing.JDialog {
         } else if (jTextFieldDate.getText() != null && !jTextFieldDate.getText().isEmpty()) {
             suiteUrl += "null/" + jTextFieldDate.getText() + "/0";
         } else {
-            suiteUrl += "null/19700101/"+((Client)jComboBoxClient.getSelectedItem()).getId();
+            suiteUrl += "null/19700101/" + ((Client) jComboBoxClient.getSelectedItem()).getId();
         }
         Request request = new Request("facture", suiteUrl);
         Response res = null;
@@ -172,31 +173,32 @@ public class RechercheFacture extends javax.swing.JDialog {
             res = request.sendRequest();
             java.lang.reflect.Type fooType = new TypeToken<ListHelper<Facture>>() {
             }.getType();
-            ListHelper<Facture> lf = (ListHelper<Facture>) res.getObject(null, fooType);           
-            res.setToken(lf.getToken());            
+            ListHelper<Facture> lf = (ListHelper<Facture>) res.getObject(null, fooType);
+            res.setToken(lf.getToken());
             for (Facture facture : lf.getList()) {
                 facture.setClient(getClientById(facture.getIdClient()));
                 ((DefaultListModel) jListFacture.getModel()).addElement(facture);
-            }            
+            }
         } catch (IOException ex) {
             Logger.getLogger(RechercheFacture.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButtonChercherActionPerformed
 
-    private Client getClientById(int idClient){
-        for (Client c : main.clients){
-            if (c.getId() == idClient){
+    private Client getClientById(int idClient) {
+        for (Client c : main.clients) {
+            if (c.getId() == idClient) {
                 return c;
             }
         }
         return null;
     }
-    
-    
+
+
     private void VisualisationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VisualisationActionPerformed
         Facture f = jListFacture.getSelectedValue();
         main.setFacture(f);
+        main.simuleCalculeClick();
     }//GEN-LAST:event_VisualisationActionPerformed
 
 
