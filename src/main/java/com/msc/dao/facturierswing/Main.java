@@ -24,6 +24,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -540,16 +541,19 @@ public class Main extends javax.swing.JFrame {
 
     private void jButtonCalculeTotauxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculeTotauxActionPerformed
         Double total = 0d;
+        DecimalFormat df = new DecimalFormat("#####.##");
+        
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             Double qte = (Double) jTable1.getValueAt(i, 1);
             Double pu = (Double) jTable1.getValueAt(i, 2);
             if (qte == null || pu == null) {
                 return;
             }
-            jTable1.getModel().setValueAt(qte * pu, i, 3);
-            total += (Double) jTable1.getValueAt(i, 3);
+            jTable1.getModel().setValueAt(new Double(df.format(qte * pu).replace(",", ".")), i, 3);
+            total += qte * pu;
         }
-        jLabelTotaux.setText("" + total);
+        
+        jLabelTotaux.setText(df.format(total));
     }//GEN-LAST:event_jButtonCalculeTotauxActionPerformed
 
     private void jButtonRemoveLineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveLineActionPerformed
